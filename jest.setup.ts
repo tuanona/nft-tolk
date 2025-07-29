@@ -1,5 +1,5 @@
-import { buildAllTact } from '@ton/blueprint';
+import { buildAll } from '@ton/blueprint';
 
 export default async function () {
-    await buildAllTact();
+    await buildAll();
 }

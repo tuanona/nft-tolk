@@ -51,7 +51,7 @@ fun onInternalMessage(in: InMessage) {
 // a handler for bounced messages (not used here, may be ommited)
 fun onBouncedMessage(in: InMessageBounced) {
 }
-lanjutkanDong()
+
 // get methods are a means to conveniently read contract data using, for example, HTTP APIs
 // note that unlike in many other smart contract VMs, get methods cannot be called by other contracts
 get fun currentCounter(): int {
