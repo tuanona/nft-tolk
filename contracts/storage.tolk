@@ -29,7 +29,7 @@ struct NftItemStorageNotInitialized {
     collectionAddress: address
 }
 
-fun NftCollectionStorage.load() {
+fun NftCollectionStorage.load(): NftCollectionStorage {
     return NftCollectionStorage.fromCell(contract.getData())
 }
 
