@@ -1,37 +1,48 @@
 tolk 1.0
 
-import "message"
+import "counter"
+import "@stdlib/gas-payments"
+import "@stdlib/common"
 
-struct Storage {
+struct Counter {
     id: uint32
-    counter: uint32
+    count: uint32
 }
 
-fun Storage.load() {
+
+struct (0x1) AddingNumber {
+    queryId: uint32
+    add: uint32
+}
+
+struct (0xf) ResetNumber {
+    queryId: uint32
+}
+
+fun Counter.load(): void {
     return Storage.fromCell(contract.getData())
+    
 }
 
-fun Storage.save(self) {
-    return contract.setData(self.toC)
+fun Counter.save(self)  {
+    return contract.setData(self.toCell())
 }
-
-
-type AllowedMessage = IncreaseCounter | ResetCounter;
+type AllowMsg = 
+    | AddingNumber 
+    | ResetNumber
 
 fun onInternalMessage(in: InMessage) {
-    val msg = lazy AllowedMessage.fromSlice(in.body);
+    val msg = lazy AllowMsg.fromSlice(in.body);
 
     match (msg) {
-        IncreaseCounter => {
-            var storage = lazy Storage.load();
-
-            storage.counter += msg.increaseBy;
+        AddingNumber => {
+            var storage = lazy Counter.load();
+            storage.count += msg.add;
             storage.save();
         }
-        ResetCounter => {
-            var storage = lazy Storage.load();
-
-            storage.counter = 0;
+        ResetNumber => {
+            var storage = lazy Counter.load();
+            storage.count = 0;
             storage.save();
         }
         else => {
@@ -40,16 +51,7 @@ fun onInternalMessage(in: InMessage) {
     }
 }
 
-fun onBouncedMessage(in: InMessageBounced) {
-    assert (in.bouncedBody.isEmpty) throw 5;
-}
-
 get fun curCounter() {
-    val storage = lazy Storage.load();
-    return storage.counter;
-}
-
-get fun thisIsID() {
-    val storage = lazy Storage.load();
-    return storage.id
+    val num = lazy Storage.load();
+    return num.count;
 }

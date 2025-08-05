@@ -1,8 +1,9 @@
 tolk 1.0
 
+import "@stdlib/common"
 import "message"
 
-const ERROR_WRONG_MESSAGE: int = 2;
+const ERROR_WRONG_MESSAGE: uint8 = 2;
 // this struct defines storage layout of the contract
 struct Storage {
     id: uint32  // required to allow multiple independent counter instances, since the contract address depends on its initial state
